@@ -41,33 +41,69 @@ RUN \
 # Install packages
 RUN \
   yum -y install \
+    autoconf \
+    automake \
+    cmake \
+    freetype-devel \
     gcc \
     gcc-c++ \
     git \
+    libtool \
     make \
     mc \
+    nasm \
     patch \
+    pkgconfig \
     python-virtualenv \
     subversion \
     tar \
     which \
-    yasm
+    yasm \
+    zlib-devel
+
+# Install libx264
+RUN git clone --depth 1 git://git.videolan.org/x264 && \
+    cd x264 && ./configure --enable-static && make && make install && ldconfig && \
+    cd .. && rm -r x264
+
+# Install libfdk_aac
+RUN git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac && \
+    cd fdk-aac && autoreconf -fiv && ./configure --disable-shared && make && make install && \
+    cd .. && rm -r fdk-aac
+
+# Install libogg
+RUN curl -O http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.gz && \
+    tar xzvf libogg-1.3.2.tar.gz && \
+    cd libogg-1.3.2 && ./configure --disable-shared && make && make install && \
+    cd .. && rm -r libogg-1.3.2 libogg-1.3.2.tar.gz
 
 # Install lame
 RUN wget -O lame-3.99.5.tar.gz http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz/download && \
     tar xvfz lame-3.99.5.tar.gz && \
     cd lame-3.99.5 && ./configure && make && make install && ldconfig && \
-    cd .. && \
-    rm -r lame-3.99.5 lame-3.99.5.tar.gz
+    cd .. && rm -r lame-3.99.5 lame-3.99.5.tar.gz
 
-# Install ffmpeg 0.7.x
-RUN wget http://www.ffmpeg.org/releases/ffmpeg-0.7.17.tar.gz && \
-   tar xvfz ffmpeg-0.7.17.tar.gz && cd ffmpeg-0.7.17 && \
-   ./configure --enable-gpl --enable-libmp3lame --enable-nonfree \
-       --enable-version3 --enable-x11grab && \
+# update pkg-config paths
+RUN export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig && \
+    /usr/bin/pkg-config --libs x264 && \
+    /usr/bin/pkg-config --libs ogg
+
+#libvorbis
+RUN curl -O http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.4.tar.gz && \
+    tar xzvf libvorbis-1.3.4.tar.gz && \
+    cd libvorbis-1.3.4 && \
+    LDFLAGS="-L/usr/local/lib" CPPFLAGS="-I/usr/local/include" ./configure --prefix="/usr/local" --with-ogg="/usr/local" --disable-shared && \
+    make && make install && cd .. && rm -r libvorbis-1.3.4 libvorbis-1.3.4.tar.gz
+
+# Install ffmpeg
+RUN git clone --depth 1 git://source.ffmpeg.org/ffmpeg && \
+   cd ffmpeg && \
+   PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" ./configure --enable-gpl \
+        --enable-nonfree --enable-libfdk-aac --enable-libfreetype \
+        --enable-libmp3lame --enable-libvorbis --enable-libx264 && \
    make && make install && \
    cd .. && \
-   rm -r ffmpeg-0.7.17 ffmpeg-0.7.17.tar.gz
+   rm -r ffmpeg
 
 # Install Python 2.6.x
 RUN wget http://eggshop.eaudeweb.ro/Python-2.6.8-edw1.tgz && \
@@ -93,3 +129,4 @@ RUN mkdir -p $ZOPE_HOME/var && \
     useradd  -g 500 -u 500 -m -s /bin/bash zope && \
     chown -R 500:500 $ZOPE_HOME
 
+CMD /bin/bash
