@@ -58,8 +58,7 @@ RUN \
     subversion \
     tar \
     which \
-    yasm \
-    zlib-devel
+    yasm
 
 # Install libx264
 RUN git clone --depth 1 git://git.videolan.org/x264 && \
