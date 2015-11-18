@@ -57,6 +57,7 @@ RUN \
     python-virtualenv \
     subversion \
     tar \
+    vim \
     which \
     yasm
 
@@ -126,4 +127,5 @@ RUN /var/local/python/python26/bin/easy_install pip
 RUN mkdir -p $ZOPE_HOME/var && \
     groupadd -g 500 zope && \
     useradd  -g 500 -u 500 -m -s /bin/bash zope && \
-    chown -R 500:500 $ZOPE_HOME
+    chown -R 500:500 $ZOPE_HOME && \
+    echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc
