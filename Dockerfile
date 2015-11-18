@@ -105,6 +105,9 @@ RUN git clone --depth 1 git://source.ffmpeg.org/ffmpeg && \
    cd .. && \
    rm -r ffmpeg
 
+#library path update
+RUN ldconfig /usr/local/lib
+
 # Install Python 2.6.x
 RUN wget http://eggshop.eaudeweb.ro/Python-2.6.8-edw1.tgz && \
     tar xvfz Python-2.6.8-edw1.tgz && cd Python-2.6.8-edw1 && \
