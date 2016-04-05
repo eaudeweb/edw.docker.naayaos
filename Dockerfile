@@ -43,7 +43,7 @@ RUN \
   yum -y install \
     autoconf \
     automake \
-    cmake \
+    cmake cronie \
     freetype-devel \
     gcc \
     gcc-c++ \
@@ -131,4 +131,5 @@ RUN mkdir -p $ZOPE_HOME/var && \
     groupadd -g 500 zope && \
     useradd  -g 500 -u 500 -m -s /bin/bash zope && \
     chown -R 500:500 $ZOPE_HOME && \
-    echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc
+    echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc && \
+    echo 'export TERM=xterm' >> /home/zope/.bashrc
