@@ -33,7 +33,7 @@ RUN yum -y updateinfo && yum -y install wget \
     python-devel \
     readline-devel \
     sqlite-devel \
-    zlib-devel
+    zlib-devel \
     autoconf \
     automake \
     cmake cronie \
