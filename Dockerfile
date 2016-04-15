@@ -27,7 +27,7 @@ RUN yum -y updateinfo && yum -y install wget \
     libxml2-devel \
     libxslt-devel \
     libyaml-devel \
-    mysql-libs \
+    mariadb-devel mysql-libs \
     openldap-devel \
     openssl-devel \
     python-devel \
