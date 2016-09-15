@@ -1,6 +1,5 @@
 FROM centos:7
 
-ENV ZOPE_HOME /var/local/forum
 ENV GOOGLE_AUTH_CLIENT_ID ''
 ENV GOOGLE_AUTH_CLIENT_SECRET ''
 ENV reCAPTCHA_PUBLIC_KEY ''
@@ -43,7 +42,6 @@ RUN yum -y updateinfo && yum -y install wget \
     git \
     libtool \
     make \
-    mc \
     nasm \
     patch \
     pkgconfig \
@@ -103,9 +101,7 @@ RUN ldconfig /usr/local/lib \
  && /var/local/python/python26/bin/easy_install pip
 
 
-RUN mkdir -p $ZOPE_HOME/var \
- && groupadd -g 500 zope \
+RUN groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
- && chown -R 500:500 $ZOPE_HOME \
  && echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc \
  && echo 'export TERM=xterm' >> /home/zope/.bashrc
