@@ -8,10 +8,10 @@ ENV WEBEX_CONTACTS ''
 
 # Enable epel release and install libraries and packages
 RUN yum -y updateinfo && yum -y install wget \
- && wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
- && rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt \
- && rpm -i rpmforge-release-0.5.3-1.el6.rf.*.rpm \
- && rm -r rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
+# && wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
+# && rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt \
+# && rpm -i rpmforge-release-0.5.3-1.el6.rf.*.rpm \
+# && rm -r rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
  && wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm \
  && rpm -ivh epel-release-7-5.noarch.rpm \
  && yum -y install \
