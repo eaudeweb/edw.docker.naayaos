@@ -8,10 +8,6 @@ ENV WEBEX_CONTACTS ''
 
 # Enable epel release and install libraries and packages
 RUN yum -y updateinfo && yum -y install wget \
-# && wget http://repository.it4i.cz/mirrors/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
-# && rpm --import https://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt \
-# && rpm -i rpmforge-release-0.5.3-1.el6.rf.*.rpm \
-# && rm -r rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm \
  && wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm \
  && rpm -ivh epel-release-7-8.noarch.rpm \
  && yum -y install \
@@ -22,6 +18,8 @@ RUN yum -y updateinfo && yum -y install wget \
     glibc-devel \
     glib2-devel \
     gvfs-devel \
+#   icu for wkhtmltopdf
+    icu \
     libjpeg-turbo-devel \
     libxml2-devel \
     libxslt-devel \
@@ -43,6 +41,8 @@ RUN yum -y updateinfo && yum -y install wget \
     libtool \
     make \
     nasm \
+#   openssl for wkhtmltopdf
+    openssl \
     patch \
     pkgconfig \
     python-virtualenv \
@@ -50,11 +50,13 @@ RUN yum -y updateinfo && yum -y install wget \
     tar \
     vim \
     which \
+#   fonts for wkhtmltopdf
+    xorg-x11-fonts-75dpi \
+    xorg-x11-fonts-Type1 \
     yasm \
- && yum clean all
-
+ && yum clean all \
 # Install libx264, libfdk_aac, libogg, lame, libvorbis, ffmpeg
-RUN git clone --depth 1 git://git.videolan.org/x264 \
+ && git clone --depth 1 git://git.videolan.org/x264 \
  && cd x264 && ./configure --enable-static && make && make install && ldconfig \
  && cd .. && rm -r x264 \
  && git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac \
@@ -83,10 +85,9 @@ RUN git clone --depth 1 git://git.videolan.org/x264 \
         --enable-libmp3lame --enable-libvorbis --enable-libx264 \
  && make && make install \
  && cd .. \
- && rm -r ffmpeg
-
+ && rm -r ffmpeg \
 #library path update and install Python 2.6.x, setuptools, pip
-RUN ldconfig /usr/local/lib \
+ && ldconfig /usr/local/lib \
  && wget http://eggshop.eaudeweb.ro/Python-2.6.8-edw1.tgz \
  && tar xvfz Python-2.6.8-edw1.tgz && cd Python-2.6.8-edw1 \
  && ./configure --prefix=/var/local/python/python26 --enable-unicode=ucs4 \
@@ -98,10 +99,13 @@ RUN ldconfig /usr/local/lib \
  && /var/local/python/python26/bin/python setup.py install \
  && cd .. \
  && rm -r setuptools-0.6c11 setuptools-0.6c11.tar.gz \
- && /var/local/python/python26/bin/easy_install pip
-
-
-RUN groupadd -g 500 zope \
+ && /var/local/python/python26/bin/easy_install pip \
+#install wkhtmltopdf
+ && wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+ && rpm -Uvh wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+ && rm wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+#final setup
+ && groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
  && echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc \
  && echo 'export TERM=xterm' >> /home/zope/.bashrc
