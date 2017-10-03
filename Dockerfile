@@ -10,6 +10,7 @@ ENV WEBEX_CONTACTS ''
 RUN yum -y updateinfo && yum -y install wget \
  && wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm \
  && rpm -ivh epel-release-7-10.noarch.rpm \
+ && yum-config-manager --add-repo http://www.nasm.us/nasm.repo \
  && yum -y install \
     cryptopp-devel \
     curl-devel \
@@ -55,34 +56,24 @@ RUN yum -y updateinfo && yum -y install wget \
     xorg-x11-fonts-Type1 \
     yasm \
  && yum clean all \
-# Install libx264, libfdk_aac, libogg, lame, libvorbis, ffmpeg
+# Install libx264, libfdk_aac, lame, ffmpeg
  && git clone --depth 1 git://git.videolan.org/x264 \
  && cd x264 && ./configure --enable-static && make && make install && ldconfig \
  && cd .. && rm -r x264 \
  && git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac \
  && cd fdk-aac && autoreconf -fiv && ./configure --disable-shared && make && make install \
  && cd .. && rm -r fdk-aac \
- && curl -O http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.gz \
- && tar xzvf libogg-1.3.2.tar.gz \
- && cd libogg-1.3.2 && ./configure --disable-shared && make && make install \
- && cd .. && rm -r libogg-1.3.2 libogg-1.3.2.tar.gz \
  && wget -O lame-3.99.5.tar.gz http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz/download \
  && tar xvfz lame-3.99.5.tar.gz \
  && cd lame-3.99.5 && ./configure && make && make install && ldconfig \
  && cd .. && rm -r lame-3.99.5 lame-3.99.5.tar.gz \
  && export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
  && /usr/bin/pkg-config --libs x264 \
- && /usr/bin/pkg-config --libs ogg \
- && curl -O http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.4.tar.gz \
- && tar xzvf libvorbis-1.3.4.tar.gz \
- && cd libvorbis-1.3.4 \
- && LDFLAGS="-L/usr/local/lib" CPPFLAGS="-I/usr/local/include" ./configure --prefix="/usr/local" --with-ogg="/usr/local" --disable-shared \
- && make && make install && cd .. && rm -r libvorbis-1.3.4 libvorbis-1.3.4.tar.gz \
  && git clone --depth 1 git://source.ffmpeg.org/ffmpeg \
  && cd ffmpeg \
  && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" ./configure --enable-gpl \
         --enable-nonfree --enable-libfdk-aac --enable-libfreetype \
-        --enable-libmp3lame --enable-libvorbis --enable-libx264 \
+        --enable-libmp3lame --enable-libx264 \
  && make && make install \
  && cd .. \
  && rm -r ffmpeg \
