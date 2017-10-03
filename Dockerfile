@@ -86,9 +86,15 @@ RUN yum -y updateinfo && yum -y install wget \
  && rm -r setuptools-0.6c11 setuptools-0.6c11.tar.gz \
  && easy_install pip \
 #install wkhtmltopdf
- && wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
- && rpm -Uvh wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
- && rm wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+# && wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2/wkhtmltox-0.12.2_linux-centos7-amd64.rpm \
+# && rpm -Uvh wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+# && rm wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
+ && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+ && unxz wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+ && tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar \
+ && mv wkhtmltox/bin/* /usr/local/bin/ \
+ && rm -rf wkhtmltox \
+ && rm -f wkhtmltox-0.12.4_linux-generic-amd64.tar \
 #final setup
  && groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
