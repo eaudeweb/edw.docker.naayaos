@@ -86,20 +86,14 @@ RUN yum -y updateinfo && yum -y install wget \
  && make && make install \
  && cd .. \
  && rm -r ffmpeg \
-#library path update and install Python 2.6.x, setuptools, pip
+#library path update and install setuptools, pip
  && ldconfig /usr/local/lib \
- && wget http://eggshop.eaudeweb.ro/Python-2.6.8-edw1.tgz \
- && tar xvfz Python-2.6.8-edw1.tgz && cd Python-2.6.8-edw1 \
- && ./configure --prefix=/var/local/python/python26 --enable-unicode=ucs4 \
- && make && make install \
- && cd .. \
- && rm -r Python-2.6.8-edw1 Python-2.6.8-edw1.tgz \
  && wget https://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz \
  && tar xvfz setuptools-0.6c11.tar.gz && cd setuptools-0.6c11 \
- && /var/local/python/python26/bin/python setup.py install \
+ && python2.7 setup.py install \
  && cd .. \
  && rm -r setuptools-0.6c11 setuptools-0.6c11.tar.gz \
- && /var/local/python/python26/bin/easy_install pip \
+ && easy_install pip \
 #install wkhtmltopdf
  && wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
  && rpm -Uvh wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
