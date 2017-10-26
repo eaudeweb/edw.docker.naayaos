@@ -13,29 +13,44 @@ RUN yum -y updateinfo && yum -y install wget \
  && rm -rf epel-release-7-10.noarch.rpm \
  && yum-config-manager --add-repo http://www.nasm.us/nasm.repo \
  && yum -y install \
+    cronie \
     cryptopp-devel \
     curl-devel \
     cyrus-sasl-devel \
-    freetype-devel \
     glibc-devel \
     glib2-devel \
     gvfs-devel \
-#   icu for wkhtmltopdf
-    icu \
-    libjpeg-turbo-devel \
     libxml2-devel \
     libxslt-devel \
     libyaml-devel \
     mariadb-devel mysql-libs \
     openldap-devel \
-    openssl-devel \
+    patch \
     python-devel \
+    python-virtualenv \
     readline-devel \
     sqlite-devel \
-    zlib-devel \
+    subversion \
+    tar \
+    vim \
+    which \
+    yasm \
+#   libpng, libjpeg, openssl, icu, libx11, libXext, libXrender
+#   xorg-x11-fonts-Type1 and xorg-x11-fonts-75dpi are needed for wkhtmltopdf
+    libpng \
+    libjpeg-turbo-devel \
+    openssl-devel \
+    icu \
+    libx11 \
+    libXext \
+    libXrender \
+    xorg-x11-fonts-Type1 \
+    xorg-x11-fonts-75dpi \
+#   ffmpeg dependencies: autoconf, automake, bzip2, cmake, freetype-devel, gcc,
+#   gcc-c++, libtool, make, nasm, pkgconfig, zlib-devel, git
     autoconf \
     automake \
-    cmake cronie \
+    cmake \
     freetype-devel \
     gcc \
     gcc-c++ \
@@ -43,19 +58,8 @@ RUN yum -y updateinfo && yum -y install wget \
     libtool \
     make \
     nasm \
-#   openssl for wkhtmltopdf
-    openssl \
-    patch \
     pkgconfig \
-    python-virtualenv \
-    subversion \
-    tar \
-    vim \
-    which \
-#   fonts for wkhtmltopdf
-    xorg-x11-fonts-75dpi \
-    xorg-x11-fonts-Type1 \
-    yasm \
+    zlib-devel \
  && yum clean all \
 # Install libx264, libfdk_aac, lame, ffmpeg
 
