@@ -67,12 +67,6 @@ RUN yum -y updateinfo && yum -y install wget \
  && cd x264 && ./configure --enable-static && make && make install && ldconfig \
  && cd .. && rm -r x264 \
 
- && git clone https://github.com/videolan/x265.git \
- && cd x265/build/linux \
- && cmake -G "Unix Makefiles" -DENABLE_SHARED:bool=off ../../source \
- && make && make install \
- && cd ../../../ && rm -rf x265 \
-
  && git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac \
  && cd fdk-aac && autoreconf -fiv && ./configure --disable-shared && make && make install \
  && cd .. && rm -r fdk-aac \
@@ -93,7 +87,7 @@ RUN yum -y updateinfo && yum -y install wget \
  && make && make install && cd .. && rm -r libvorbis-1.3.5 libvorbis-1.3.5.tar.gz \
 
  && export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
- && /usr/bin/pkg-config --libs vorbis x264 x264 \
+ && /usr/bin/pkg-config --libs vorbis x264 \
  && git clone --depth 1 git://source.ffmpeg.org/ffmpeg \
  && cd ffmpeg \
  && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" ./configure \
@@ -106,7 +100,6 @@ RUN yum -y updateinfo && yum -y install wget \
         --enable-libmp3lame \
         --enable-libvorbis \
         --enable-libx264 \
-        --enable-libx265 \
  && make && make install \
  && cd .. \
  && rm -r ffmpeg \
@@ -118,12 +111,11 @@ RUN yum -y updateinfo && yum -y install wget \
  && python2.7 setup.py install \
  && cd .. \
  && rm -r setuptools-0.6c11 setuptools-0.6c11.tar.gz \
- && easy_install pip \
+ && wget https://bootstrap.pypa.io/get-pip.py \
+ && python ./get-pip.py \
+ && rm -r ./get-pip.py \
 
 #install wkhtmltopdf
-# && wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2/wkhtmltox-0.12.2_linux-centos7-amd64.rpm \
-# && rpm -Uvh wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
-# && rm wkhtmltox-0.12.2.1_linux-centos7-amd64.rpm \
  && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
  && unxz wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
  && tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar \
