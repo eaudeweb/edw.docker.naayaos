@@ -104,17 +104,6 @@ RUN yum -y updateinfo && yum -y install wget \
  && cd .. \
  && rm -r ffmpeg \
 
-#library path update and install setuptools, pip
- && ldconfig /usr/local/lib \
- && wget https://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz \
- && tar xvfz setuptools-0.6c11.tar.gz && cd setuptools-0.6c11 \
- && python2.7 setup.py install \
- && cd .. \
- && rm -r setuptools-0.6c11 setuptools-0.6c11.tar.gz \
- && wget https://bootstrap.pypa.io/get-pip.py \
- && python ./get-pip.py \
- && rm -r ./get-pip.py \
-
 #install wkhtmltopdf
  && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
  && unxz wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
