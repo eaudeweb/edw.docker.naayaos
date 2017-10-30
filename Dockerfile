@@ -8,9 +8,9 @@ ENV WEBEX_CONTACTS ''
 
 # Enable epel release and install libraries and packages
 RUN yum -y updateinfo && yum -y install wget \
- && wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm \
- && rpm -ivh epel-release-7-10.noarch.rpm \
- && rm -rf epel-release-7-10.noarch.rpm \
+ && wget http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm \
+ && rpm -ivh epel-release-7-11.noarch.rpm \
+ && rm -rf epel-release-7-11.noarch.rpm \
  && yum-config-manager --add-repo http://www.nasm.us/nasm.repo \
  && yum -y install \
     cronie \
