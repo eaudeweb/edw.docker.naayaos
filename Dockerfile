@@ -64,26 +64,39 @@ RUN yum -y updateinfo && yum -y install wget \
 # Install libx264, libfdk_aac, lame, ffmpeg
 
  && git clone --depth 1 git://git.videolan.org/x264 \
- && cd x264 && ./configure --enable-static && make && make install && ldconfig \
+ && cd x264 \
+ && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" ./configure --prefix="/usr/local/" --enable-static \
+ && make && make install \
  && cd .. && rm -r x264 \
 
- && git clone --depth 1 git://git.code.sf.net/p/opencore-amr/fdk-aac \
- && cd fdk-aac && autoreconf -fiv && ./configure --disable-shared && make && make install \
+ && git clone https://github.com/videolan/x265.git \
+ && cd x265/build/linux \
+ && cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="/usr/local/" -DENABLE_SHARED:bool=off ../../source \
+ && make && make install \
+ && cd ../../../ && rm -rf x265 \
+
+ && git clone --depth 1 https://github.com/mstorsjo/fdk-aac \
+ && cd fdk-aac \
+ && autoreconf -fiv \
+ && ./configure --prefix="/usr/local" --disable-shared \
+ && make && make install \
  && cd .. && rm -r fdk-aac \
 
- && wget -O lame-3.99.5.tar.gz http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz/download \
- && tar xvfz lame-3.99.5.tar.gz \
- && cd lame-3.99.5 && ./configure && make && make install && ldconfig \
- && cd .. && rm -r lame-3.99.5 lame-3.99.5.tar.gz \
+ && wget -O lame-3.100.tar.gz http://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz \
+ && tar xvfz lame-3.100.tar.gz \
+ && cd lame-3.100 && ./configure --prefix="/usr/local/" --bindir="/usr/local/bin" --enable-nasm \
+ && make && make install \
+ && cd .. && rm -r lame-3.100 lame-3.100.tar.gz \
 
  && curl -O https://ftp.osuosl.org/pub/xiph/releases/ogg/libogg-1.3.2.tar.gz \
  && tar xzvf libogg-1.3.2.tar.gz \
- && cd libogg-1.3.2 && ./configure --disable-shared && make && make install \
+ && cd libogg-1.3.2 && ./configure --prefix="/usr/local/" --disable-shared \
+ && make && make install \
  && cd .. && rm -r libogg-1.3.2 libogg-1.3.2.tar.gz \
 
  && curl -O https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.5.tar.gz \
  && tar xzvf libvorbis-1.3.5.tar.gz && cd libvorbis-1.3.5 \
- && LDFLAGS="-L/usr/local/lib" CPPFLAGS="-I/usr/local/include" ./configure --prefix="/usr/local" --with-ogg="/usr/local" --disable-shared \
+ && LDFLAGS="-L/usr/local/lib" CPPFLAGS="-I/usr/local/include" ./configure --prefix="/usr/local/" --with-ogg="/usr/local/" --disable-shared \
  && make && make install && cd .. && rm -r libvorbis-1.3.5 libvorbis-1.3.5.tar.gz \
 
  && export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
@@ -91,8 +104,12 @@ RUN yum -y updateinfo && yum -y install wget \
  && git clone --depth 1 git://source.ffmpeg.org/ffmpeg \
  && cd ffmpeg \
  && PKG_CONFIG_PATH="/usr/local/lib/pkgconfig" ./configure \
-        --extra-cflags="-I/usr/local/include" --extra-ldflags="-L/usr/local/lib -ldl" \
+        --prefix="/usr/local/" \
         --pkg-config-flags="--static" \
+        --extra-cflags="-I/usr/local/include" \
+        --extra-ldflags="-L/usr/local/lib" \
+        --extra-libs=-lpthread \
+        --bindir="/usr/local/bin" \
         --enable-gpl \
         --enable-nonfree \
         --enable-libfdk-aac \
@@ -100,6 +117,7 @@ RUN yum -y updateinfo && yum -y install wget \
         --enable-libmp3lame \
         --enable-libvorbis \
         --enable-libx264 \
+        --enable-libx265 \
  && make && make install \
  && cd .. \
  && rm -r ffmpeg \
@@ -115,5 +133,6 @@ RUN yum -y updateinfo && yum -y install wget \
 #final setup
  && groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
+ && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> /home/zope/.bashrc \
  && echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc \
  && echo 'export TERM=xterm' >> /home/zope/.bashrc
