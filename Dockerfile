@@ -134,5 +134,6 @@ RUN yum -y updateinfo && yum -y install wget \
  && groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
  && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> /home/zope/.bashrc \
+ && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> /root/.bashrc \
  && echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc \
  && echo 'export TERM=xterm' >> /home/zope/.bashrc
