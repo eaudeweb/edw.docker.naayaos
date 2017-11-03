@@ -5,6 +5,7 @@ ENV GOOGLE_AUTH_CLIENT_SECRET ''
 ENV reCAPTCHA_PUBLIC_KEY ''
 ENV reCAPTCHA_PRIVATE_KEY ''
 ENV WEBEX_CONTACTS ''
+ENV LD_LIBRARY_PATH '/usr/local/lib'
 
 # Enable epel release and install libraries and packages
 RUN yum -y updateinfo && yum -y install wget \
@@ -133,7 +134,4 @@ RUN yum -y updateinfo && yum -y install wget \
 #final setup
  && groupadd -g 500 zope \
  && useradd  -g 500 -u 500 -m -s /bin/bash zope \
- && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> /home/zope/.bashrc \
- && echo 'export LD_LIBRARY_PATH=/usr/local/lib' >> /root/.bashrc \
- && echo 'export PATH=$PATH:/usr/local/bin' >> /home/zope/.bashrc \
  && echo 'export TERM=xterm' >> /home/zope/.bashrc
