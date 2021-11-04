@@ -1,6 +1,5 @@
 autoconf
 automake
-git
 libass-dev
 libgnutls28-dev
 libfreetype6-dev

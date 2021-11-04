@@ -1,6 +1,7 @@
 apache2
 build-essential
 curl
+git
 ldap-utils
 libcrypto++-dev
 libglib2.0-dev
