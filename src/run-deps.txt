@@ -21,5 +21,6 @@ python2
 python2-dev
 pkg-config
 texinfo
+vim
 virtualenv
 wget
