@@ -1,5 +1,6 @@
 apache2
 build-essential
+cron
 curl
 git
 ldap-utils
