@@ -3,6 +3,7 @@ build-essential
 cron
 curl
 git
+iputils-ping
 ldap-utils
 libcrypto++-dev
 libglib2.0-dev
