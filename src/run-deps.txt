@@ -5,6 +5,7 @@ curl
 git
 iputils-ping
 ldap-utils
+libass-dev
 libcrypto++-dev
 libglib2.0-dev
 libjpeg62-turbo-dev
